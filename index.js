@@ -16,7 +16,7 @@ mongoose.connect(process.env.DBURL, () => {
 
 app.post("/todos", async (req, res) => {
   try {
-    const todo = await TODOS.create(req.body);
+    const todo = await TODOS.create({ task: req.body.task, isEdited: false });
     res.json(todo);
   } catch (error) {
     console.log(error);
@@ -33,11 +33,9 @@ app.get("/todos", async (req, res) => {
 
 app.put("/todos/:id", async (req, res) => {
   try {
-    const updatedTodo = await TODOS.findByIdAndUpdate(
-      "63e151b533f8cce82c2e4b20",
-      req.body,
-      { new: true }
-    );
+    const updatedTodo = await TODOS.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
     res.json(updatedTodo);
   } catch (error) {
     console.log(error);
@@ -46,9 +44,7 @@ app.put("/todos/:id", async (req, res) => {
 
 app.delete("/todos/:id", async (req, res) => {
   try {
-    const deletedTodo = await TODOS.findByIdAndDelete(
-      "63e151b533f8cce82c2e4b20"
-    );
+    const deletedTodo = await TODOS.findByIdAndDelete(req.params.id);
     res.json(deletedTodo);
   } catch (error) {
     console.log(error);
